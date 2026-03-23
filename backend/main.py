@@ -11,6 +11,7 @@ from backend.api.routers import health
 from contextlib import asynccontextmanager
 from infra.logger_structlog import StructLogger
 import asyncio
+from huggingface_hub import hf_hub_download
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -29,8 +30,13 @@ async def lifespan(app: FastAPI):
     
     # Using this way to can store data. it is acts as a dict which holds instances
     app.state.detection_model = YOLO_Detector(settings.yolo.model_path)
-    app.state.safety_detection_model = YOLO_Detector(settings.security_detector.model_path)
     app.state.depth_model = DepthAnything(encoder=settings.depth.encoder, depth_model_path=settings.depth.model_path, DEVICE="cuda")
+
+    # safety_detection_path = hg_hub_download(
+    #     repo_id="e1250/safety_detection",
+    #     filename="yolo_smoke_fire.pt",
+    # )
+    app.state.safety_detection_model = YOLO_Detector(settings.security_detector.model_path)
 
     app.state.logger = logger
     app.state.settings = settings

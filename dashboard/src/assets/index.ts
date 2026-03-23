@@ -1,17 +1,17 @@
 // Assets
-import Edit from './edit.svg'
-import Camera from './camera.svg'
-import Upload from './upload.svg'
-import VideoCamera from './Video Camera.svg'
-import AddImage from './add image.svg'
-import SaveDesign from './Save Design.svg'
-import Arrow from './Right Arrow.svg'
+import Edit from './Edit.svg'
+import Camera from './Camera.svg'
+import Upload from './Upload.svg'
+import VideoCamera from './Video-Camera.svg'
+import AddImage from './Add-Image.svg'
+import SaveDesign from './Save-Design.svg'
+import Arrow from './Right-Arrow.svg'
 import Clear from './Clear.svg'
-import importFloors from './Import Floors.svg'
+import importFloors from './Import-Floors.svg'
 import Export from "./Export.svg"
-import createFloor from "./Add Floor.svg"
-import deleteFloor from "./Delete Floor.svg"
-import drawMode from "./Draw Mode.svg"
+import createFloor from "./Add-Floor.svg"
+import deleteFloor from "./Delete-Floor.svg"
+import drawMode from "./Draw-Mode.svg"
 
 export const Assets = {
     // Modes

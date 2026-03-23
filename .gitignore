@@ -1,18 +1,10 @@
-# __pycache__
 */__pycache__
 
 ai/dl_models/
 node_modules/
 
-
-# AI Folder
-ai.dl_models
-ai.dl_models
-
-
 # App Folder
 .env
-
 
 # Temps
 .qodo

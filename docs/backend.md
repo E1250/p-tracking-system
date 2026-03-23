@@ -63,3 +63,5 @@ We used `app.state` to manage storages between pages, but this only works on one
 also i have a great question, how this data is going to be fetched, and i have two answers, per floor or per camera, 
 the per camera selection is going to be really hard, as it is going to be many number of fetching, as it is per camera, and also it is going to be for each time you select this floor. 
 So the better answer here, is per floor, you just pull the full floor details, and then you filter what you exactly need. 
+
+For the model, It is really beign suggested to let HF handling downloading and storing the model, don't hardcode the model path or the file. 
