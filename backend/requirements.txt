@@ -6,7 +6,6 @@ ultralytics
 
 pydantic
 pydantic_settings
-ruff
 structlog
 
-ai@git+https://github.com/E1250/p-tracking_system.git
+tracking_system_ai@git+https://github.com/E1250/p-tracking_system.git
