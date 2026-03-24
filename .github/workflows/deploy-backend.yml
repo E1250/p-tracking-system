@@ -28,9 +28,5 @@ jobs:
           git config --global user.name "Github Actions"
           git remote add space https://e1250:$HF_TOKEN@huggingface.co/spaces/e1250/tracking_system_backend
 
-          git fetch space
-          git checkout main
-          git pull space main --rebase --allow-unrelated-histories 
-
-          git subtree push --prefix=backend space main
+          git push space 'git subtree push --prefix=backend space main':main --force
           
