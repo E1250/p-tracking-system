@@ -29,5 +29,5 @@ jobs:
           git remote add space https://e1250:$HF_TOKEN@huggingface.co/spaces/e1250/tracking_system_backend
 
           git subtree split --prefix=backend -b deploy_branch
-          git push space deploy-branch:main --force
+          git push space deploy_branch:main --force
           
