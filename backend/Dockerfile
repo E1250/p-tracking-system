@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 # Install git package for our ai package, then clear cache to save docker space. 
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
