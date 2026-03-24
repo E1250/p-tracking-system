@@ -27,5 +27,9 @@ jobs:
           git config --global user.email "deploy@github.com"
           git config --global user.name "Github Actions"
           git remote add space https://e1250:$HF_TOKEN@huggingface.co/spaces/e1250/tracking_system_backend
+
+          git fetch space
+          git pull space main
+
           git subtree push --prefix=backend space main
           
