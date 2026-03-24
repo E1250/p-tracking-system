@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: tracking_system_ai
+Version: 0.0.1
+Summary: AI logic for tracking backend server
+Requires-Python: >=3.11
+Requires-Dist: torch
+Requires-Dist: numpy
+Requires-Dist: opencv-python

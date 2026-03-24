@@ -5,3 +5,31 @@ exclude = [
     "playground.py",
     "playground.ipynb"
 ]
+
+# This is an overall alternative of SetupTools function that had been used before to create a package
+# It tells pip which tool to use to build/install package.
+# my-custom-ai-logic @ git+https://github.com/your-username/your-repo.git#subdirectory=ai_tools_folder
+#tracking_system_ai@git+    .git#subdirectory=folder_name
+
+# [build-system]
+# requires = ["setuptools>=61.0"]
+# build-backend = "setuptools.build_meta"
+
+# Package metadata
+[project]
+name = "tracking_system_ai"  # What ll be used in 'pip install'
+version = "0.0.1"
+description = "AI logic for tracking backend server"
+requires-python = ">=3.11"
+
+dependencies = [
+    "torch",
+    "numpy",
+    "opencv-python"
+]
+
+
+# Location of the package - you are going to use this to import
+[tool.setuptools]
+packages = ["ai"]
+# package-dir = {"ai" = "."}  # Mentioning that the package is in this folder directly.
