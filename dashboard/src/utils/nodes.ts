@@ -1,4 +1,4 @@
-import {eucleadianDistance} from "./equations"
+import {eucleadianDistance, lerp} from "./equations"
 
 
 export function isTooClose(newNodePosition, nodes){
@@ -117,3 +117,64 @@ export function findClosestEdgePoint(cursor: Node, nodes: Node[], threshold = 0.
     }
     return closest
 }
+
+
+export function placeDepthPointOnRay(
+    cameraPos:Node,
+    cameraAngleDeg:number,
+    depthRatio: number,
+    roomNodes: Node[]
+  ): Node | null{
+    /**
+     * From the camera position, Calculate the distance till the edge of the room.
+     * Place a point represents a detection based on depth ratio
+     */
+  
+    // At leasat 3 points
+    if (roomNodes.length < 3) return null
+  
+    // Clippting depthRatio just as validator to be in 0 to 1 ratio.
+    const t = Math.max(0, Math.min(1, depthRatio))
+  
+    // Convert camera angle from degree to radian.
+    const angleRad = (cameraAngleDeg * Math.PI) / 180
+    // Unit direction
+    const dir = {
+      x: Math.cos(angleRad),
+      y: Math.sin(angleRad)
+    }
+
+    // Nearest intersection on the ray
+    let bestU = Number.POSITIVE_INFINITY
+    let hit:Node | null = null
+    
+    for (let i = 0; i < roomNodes.length; i++){
+        const A = roomNodes[i]
+        const B = roomNodes[(i + 1) % roomNodes.length]
+
+        // Edge vector
+        const S = {x: B.x - A.x, y: B.y - A.y}
+
+        const denom = dir.x * S.y - dir.y * S.x
+        if (Math.abs(denom) < 1e-9) continue;
+
+        const AC = {x: A.x - cameraPos.x, y: A.y - cameraPos.y}
+        const u = (AC.x * S.y - AC.y * S.x) / denom
+        const v = (AC.x * dir.y - AC.y * dir.x) / denom
+
+        const uMin = 1e-4
+        if (u >= uMin && v >= 0 && v <= 1 && u < bestU){
+            bestU = u
+            hit = {
+                x: cameraPos.x + u * dir.x,
+                y: cameraPos.y + u * dir.y
+            }
+        }
+    }
+
+    if (!hit) return null
+    return {
+        x: lerp(cameraPos.x, hit.x, t),
+        y: lerp(cameraPos.y, hit.y, t)
+    } 
+  }

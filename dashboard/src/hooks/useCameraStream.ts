@@ -17,7 +17,7 @@ export function useCameraStream(serverURL: string){
         ws.onmessage = (message) => {
             // Parsing the raw JSON
             const data = JSON.parse(message.data)
-            setCameras(data.cameras)
+            setCameras(data)
         }
         // Clean and undo when the component unmounts.
         return () => ws.close()

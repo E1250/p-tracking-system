@@ -3,6 +3,7 @@
 ai/dl_models/
 node_modules/
 dummy_data/
+app/logs
 
 # App Folder
 .env

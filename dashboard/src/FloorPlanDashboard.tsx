@@ -192,23 +192,24 @@ function FloorPlanEditor() {
                       }))
                     }
                 }
-                onSelect={() => {
-                  console.log(roomIdx)
-                  if (mode === "edit")
-                    setSelectedRoomIdx(roomIdx)
-                    setMode("draw")
-                    }
-              }/>
+                // onSelect={() => {
+                //   console.log(roomIdx)
+                //   if (mode === "edit")
+                //     setSelectedRoomIdx(roomIdx)
+                //     setMode("draw")
+                //     }
+                // }
+              />
           ))}
 
           {currentFloor.rooms.map((polygon, _) => 
             polygon.cameras.map((camera, i) =>
-              <CameraNode pos={camera} icon={Assets.VideoCamera} rotation={camera.angle} key={i} cameraData={{hasDanger: true, depthPoints: []}}/>
+              <CameraNode pos={camera} icon={Assets.VideoCamera} rotation={camera.angle} key={i} cameraData={{hasDanger: true, depthPoints: [0.5, 0.7, 0.2]}} roomNodes={currentRoomNodes}/>
           ))}
 
           {/* ----- Hovering State ------------ */}
           {isHovering && mode === "draw" && <CircleNode pos={hoveringMousePos} key={-1} mode={mode}/> }
-          {isHovering && mode === "camera" && <CameraNode icon={Assets.VideoCamera} pos={hoveringMousePos} rotation={hoveringMousePos.angle} key={-1} /> }
+          {isHovering && mode === "camera" && <CameraNode icon={Assets.VideoCamera} pos={hoveringMousePos} rotation={hoveringMousePos.angle} key={-1} roomNodes={[]}/> }
           
         </Layer>
       </Stage>

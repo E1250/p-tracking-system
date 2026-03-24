@@ -30,4 +30,3 @@ jobs:
 
           git subtree split --prefix=backend -b deploy_branch
           git push space deploy_branch:main --force
-          
