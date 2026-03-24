@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+gunicorn
+
+ultralytics
+
+pydantic
+pydantic_settings
+ruff
+structlog
+
