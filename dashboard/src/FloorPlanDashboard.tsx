@@ -102,10 +102,10 @@ function FloorPlanEditor() {
         if(isTooClose(newNodePos, currentFloor.rooms.at(-1)?.cameras)){return;}
 
         let cameraId = prompt("Enter Camera ID: ") ?? "Test_camera"
-
-        
-        setFloor(produce(prev => {prev[currentFloorIdx].rooms.at(selectedRoomIdx)?.cameras.push({id: cameraId, x: newNodePos.x, y:newNodePos.y, angle: hoveringMousePos.angle})}))
-        console.log("New camera added.")
+        if (cameraId !== null){
+          setFloor(produce(prev => {prev[currentFloorIdx].rooms.at(selectedRoomIdx)?.cameras.push({id: cameraId, x: newNodePos.x, y:newNodePos.y, angle: hoveringMousePos.angle})}))
+          console.log("New camera added.")
+        }
       }
 
     }else if (button === 2){  // Right click
