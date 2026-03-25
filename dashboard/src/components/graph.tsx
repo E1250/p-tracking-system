@@ -43,17 +43,13 @@ export function CameraNode({icon, pos, rotation=0, key, cameraData={hasDanger: f
 
   const [image] = useImage(icon)
   let detectionPoints:Node[] | null = []
-  // console.log("Camera Nodes", cameraData)
-  // console.log("Room Nodes", roomNodes)
 
-  // TODO: Just check null here of detections points, and then add dummy values to test on and try again. 
   if (cameraData.streamDetections.length !==0 && roomNodes.length !== 0) {
     detectionPoints = cameraData.streamDetections
     .map((d) => placeDetectionPoint(pos, rotation, d, roomNodes))
     .filter((p): p is Node => p !== null)
   }
 
-  // console.log(depthPoints)
   return (
     <>
      <StatusMark pos={pos} color={cameraData.hasDanger ? "red" : "green"} />
@@ -73,12 +69,27 @@ export function CameraNode({icon, pos, rotation=0, key, cameraData={hasDanger: f
       />
 
       {detectionPoints.map((pt, i) => (
+        <Line 
+          points={[
+            pos.x * window.innerWidth,
+            pos.y * window.innerHeight,
+            pt.x * window.innerWidth,
+            pt.y * window.innerHeight
+          ]}
+          stroke={cameraData.hasDanger ? "red" : "green"}
+          strokeWidth={1.5}
+          dash={[6, 4]}
+          opacity={0.5}
+        />
+      ))}
+
+      {detectionPoints.map((pt, i) => (
         <Circle
           key={i}
           x = {pt.x * window.innerWidth}
           y = {pt.y * window.innerHeight}
           radius={8}
-          fill="black"
+          fill={cameraData.hasDanger ? "red" : "green"}
           stroke="black"
           opacity={0.9}
         />
