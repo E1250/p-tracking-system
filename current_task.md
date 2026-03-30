@@ -1,6 +1,6 @@
 - For tasks.md, it is kinda alternate to `Trello` and agile for project management, I plan to keep using Github Issues and ``todo` file. 
 - I would prefer using `env.yml` rather than req.txt in my case.
-- fb16 has been added, it takes lower memory and get the same accuracy. 
+- fb16 has been added, it takes lower memory and get the same accuracy.
 
 ## GP Tracking Dashboard — Task Plan (End-to-End, Multi-Worker)
 
@@ -8,24 +8,12 @@ Goal: product-grade realtime incident detection (person/fire/smoke) from live ca
 
 ### Guiding constraints
 
-- Multi-worker friendly (no reliance on in-process `app.state` for shared state)
 - Low-latency realtime (bounded buffering, backpressure, "latest-frame wins")
 - Observable (metrics + structured logs + traces/profiles)
 - Reproducible (dependency manifests match imports; clear run commands)
 - Testable (pytest tests for API + websocket flows)
 
 ---
-
-## Phase 0 — Repo hygiene + reproducibility (quick wins)
-
-- Add `TASKS.md` (this file)
-- Ensure Python deps are reproducible:
-  - Sync `requirements.txt` with actual backend imports (fastapi/uvicorn/prometheus_client/structlog/pydantic-settings/pyyaml/opencv-python/numpy/etc.)
-  - Decide: use `requirements.txt` as source of truth, and keep `env.yml` optional (or generate it from pip)
-- Add `.env.example` (no secrets), document required env vars
-- Ensure runtime artifacts are gitignored:
-  - `app/logs/`, `app/*profile*.html`, `app/*.json` profiler outputs, etc.
-  Deliverable: `pip install -r requirements.txt` boots backend.
 
 ---
 

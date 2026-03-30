@@ -1,10 +1,13 @@
 import asyncio
 import itertools
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from pandas.core.frame import nested_data_to_arrays
 from ai.contracts.detector import DetectionResults
-from backend.api.routers.metrics import active_cameras, frame_processing_duration_seconds
+from backend.api.routers.metrics import active_cameras, decode_duration_seconds, depth_duration_seconds, detection_duration_seconds, frame_processing_duration_seconds
 from backend.contracts.camera_metadata import CameraMetadata, DetectionMetadata
 import traceback
+import mlflow
+from backend.utils.experiment import log_config
 
 import cv2 as cv
 import numpy as np
@@ -35,7 +38,11 @@ async def websocket_detect(websocket: WebSocket, camera_id:str):
     logger.info(f"Client ID >>{camera_id}<< Connected...")
     
     loop = asyncio.get_running_loop() 
-    run = mlflow.start_run(run_name=f'camera_{camera_id}')
+    step_counter = itertools.count()
+    if mlflow.active_run():
+         mlflow.end_run()
+    run = mlflow.start_run(run_name=f'camera_{camera_id}', nested=True)
+    log_config()
 
     try:
         # What are the info you aim to collect from the camera? 
@@ -71,24 +78,19 @@ async def websocket_detect(websocket: WebSocket, camera_id:str):
 
             image_array = await loop.run_in_executor(None, decode_frame)
             decode_duration_seconds.labels(camera_id).observe(round(time.time() - t0, 3))
-            mlflow.log_metric("frame_processing_time", round(time.time() - t0, 3))
+            mlflow.log_metric("frame_processing_time", round(time.time() - t0, 3), next(step_counter))
 
             detection_task = loop.run_in_executor(None, run_detection, image_array)
             safety_task = loop.run_in_executor(None, run_safety, image_array)
 
             detections, safety_detection = await asyncio.gather(detection_task, safety_task)
             detection_duration_seconds.labels(camera_id).observe(round(time.time() - t0, 3))
-            mlflow.log_metric("detection_duration_seconds", round(time.time() - t0, 3))
-
-            depth_points = await loop.run_in_executor(None, run_depth, image_array, boxes_center) if boxes_center else []
-            depth_duration_seconds.labels(camera_id).observe(round(time.time() - t0, 3))
-            mlflow.log_metric("depth_duration_seconds", round(time.time() - t0, 3))
+            mlflow.log_metric("detection_duration_seconds", round(time.time() - t0, 3), next(step_counter))
 
             # Profiling
             frame_processing_duration_seconds.labels(camera_id).observe(round(time.time() - t0, 3))
             logger.debug("Frame processed", camera_id=camera_id)
-            mlflow.log_metric("frame_processing duration time", round(time.time() - t0, 3))
-
+            mlflow.log_metric("frame_processing duration time", round(time.time() - t0, 3), next(step_counter))
 
             boxes_center = []
             boxes_center_ratio = []
@@ -99,6 +101,10 @@ async def websocket_detect(websocket: WebSocket, camera_id:str):
                 ycenter = (ymax + ymin) / 2
                 boxes_center.append((int(xcenter), int(ycenter)))
                 boxes_center_ratio.append(xcenter / image_array.shape[1])
+            
+            depth_points = await loop.run_in_executor(None, run_depth, image_array, boxes_center) if boxes_center else []
+            depth_duration_seconds.labels(camera_id).observe(round(time.time() - t0, 3))
+            mlflow.log_metric("depth_duration_seconds", round(time.time() - t0, 3), next(step_counter))
 
             detection_metadata = [DetectionMetadata(depth=depth, xRatio=xRatio) for depth, xRatio in zip(depth_points, boxes_center_ratio)]
             metadata = CameraMetadata(camera_id=camera_id, is_danger = True if safety_detection else False, detection_metadata=detection_metadata)

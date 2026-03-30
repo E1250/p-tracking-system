@@ -2,7 +2,7 @@ from fastapi import FastAPI
 # from prometheus_client import metrics
 from ai.depth.depth_anything import DepthAnything
 from ai.detectors.yolo_detector import YOLO_Detector
-from app.config import AppConfig
+from config.settings import AppConfig
 from backend.api.routers.metrics import metrics_asgi_app
 from infra.system_metrics import log_system_metrics
 from backend.api.routers import camera_stream
@@ -12,7 +12,7 @@ from contextlib import asynccontextmanager
 from infra.logger_structlog import StructLogger
 import asyncio
 import mlflow
-from backend.utils.experiment import log_config()
+from backend.utils.experiment import log_config
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -50,8 +50,9 @@ async def lifespan(app: FastAPI):
     logger.warn("Shutting down the server....")
     # You can remove connections and release gpu here .  
 
+mlflow.set_tracking_uri("sqlite:///config/logs/mlflow.db")
 mlflow.set_experiment("realtime-detection-system")
-log_config()
+mlflow.enable_system_metrics_logging()
 
 app = FastAPI(
     title="Tracking System Backend",

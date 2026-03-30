@@ -1,5 +1,5 @@
 import structlog
-from app.config import AppConfig
+from config.settings import AppConfig
 from domain.logger import Logger
 from pathlib import Path
 import logging

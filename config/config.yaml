@@ -17,7 +17,7 @@ prometheus_port: 9091
 paths:
   project_dir: &proj_dir G:\MyComputer\Workspace\Projects\gp-tracking-dashboard\tracking_dashboard
   models_dir: &models_dir !join [*proj_dir, ai, dl_models]
-  logs_dir:  !join [*proj_dir, app, logs] 
+  logs_dir:  !join [*proj_dir, config, logs, logs] 
 
 yolo:
   model_path: !join [*models_dir, yolo26s.pt] 

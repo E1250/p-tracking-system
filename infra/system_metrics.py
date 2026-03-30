@@ -1,7 +1,7 @@
 from domain.logger import Logger
 import psutil
 import asyncio
-import cpu_usage, mem_usage from backend.api.routers.metrics
+from backend.api.routers.metrics import active_workers, cpu_usage, mem_usage
 
 async def log_system_metrics(logger:Logger, logger_interval_sec:float):
     while True:
@@ -18,8 +18,8 @@ async def log_system_metrics(logger:Logger, logger_interval_sec:float):
 
         # Prometheus
         cpu_usage.set(cpu)
-        mem_usage.set(mem)
+        mem_usage.set(mem.percent)
 
-        active_workers.set()
+        # active_workers.set()
 
         await asyncio.sleep(logger_interval_sec)

@@ -1,6 +1,7 @@
 import asyncio
 import websockets
 import cv2 as cv
+import traceback
 
 async def test_websocket(camera_id:str="test_camera_id"):
     # Don't forget to add the camera id. or it will broke.
@@ -35,6 +36,7 @@ async def test_websocket(camera_id:str="test_camera_id"):
                 await asyncio.sleep(2)
 
     except Exception as e:
+        traceback.print_exc()
         print(e)
 
 

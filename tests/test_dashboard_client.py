@@ -1,6 +1,7 @@
 import asyncio
 from fastapi import WebSocketDisconnect
 import websockets
+import traceback
 
 async def test_dashboard_client():
     # Don't forget to make sure the camera is streaming, or it will broke, as it is a realtime. 
@@ -14,6 +15,7 @@ async def test_dashboard_client():
     except WebSocketDisconnect:
         pass
     except Exception as e:
+        traceback.print_exc()
         print(e)
 
 
