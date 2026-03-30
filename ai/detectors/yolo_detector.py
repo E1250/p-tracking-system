@@ -7,9 +7,11 @@ from domain.detector import Detector
 from ai.utils.constants import YOLOExportFormats
 
 class YOLO_Detector(Detector):
-    def __init__(self, model_path:Path):
+    def __init__(self, model_path:Path, f16=False):
         self.model = YOLO(model_path)
+        # self.model = self.model.eval()
         self.names = self.model.names
+        self.f16 = f16
 
     def detect(self, frame) -> DetectionResults:
         """Detecting using YOLO model
@@ -18,7 +20,7 @@ class YOLO_Detector(Detector):
         return: 
             DetectionResults
         """
-        results = self.model(frame)[0]
+        results = self.model(frame, half=self.f16)[0]  # Use fload 16, it is faster on GPUs with the same accuracy. 
         boxes = results.boxes
         
         detections: List[BBox] = [BBox.from_yolo(i, boxes, self.names) for i in range(len(boxes.cls))]

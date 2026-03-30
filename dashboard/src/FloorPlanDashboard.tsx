@@ -10,7 +10,7 @@ import {EdgeNode, CameraNode, CircleNode} from './components/graph';
 // Interfaces
 import {Node, Room, Floor, EditorMode} from "./types/graph";
 
-import { angleTo, lerp } from './utils/equations';
+import { angleTo, eucleadianDistance, lerp } from './utils/equations';
 import { isTooClose, alignedLine, findClosestEdgePoint, isOnEdge, StreamDetections } from './utils/nodes';
 import {saveFloorsState, loadFloorsState, importFloors, exportFloors, clearFloorState} from './utils/storage'
 import { handleUpload } from './utils/functions';
@@ -57,7 +57,27 @@ function FloorPlanEditor() {
       nodes.pop()
     }))}
   const popCamera = () => setFloor(produce(prev => {prev[currentFloorIdx].rooms.at(selectedRoomIdx)?.cameras.pop()}))
-  
+  const popNearestCamera = () => {
+    if (selectedRoomIdx === -1) return 
+
+    setFloor(produce(prev => {
+      const cameras = prev[currentFloorIdx].rooms[selectedRoomIdx].cameras
+      if (cameras.length === 0) return 
+
+      let closesIdx = 0
+      let minDist = Infinity
+
+      cameras.forEach((camera, idx) => {
+          const dist = eucleadianDistance(camera, hoveringMousePos)
+          if (dist < minDist){
+            minDist = dist
+            closesIdx = idx
+          }
+      })
+      cameras.splice(closesIdx, 1)
+    }))
+  }
+
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent){
       switch (e.key){
@@ -115,7 +135,8 @@ function FloorPlanEditor() {
         // TODO remove also the camera related to this node.
         console.log("Node has been removed")
       }else if(mode === "camera"){
-        popCamera()
+        // popCamera()
+        popNearestCamera()
         console.log("Camera has been removed")
       }
     }
@@ -267,8 +288,8 @@ function FloorPlanEditor() {
 
           <IconButton label="Draw Mode" onClick={() => {
             if (selectedRoomIdx === -1){
-              let cameraName = prompt("Enter Room Name/ID: ") ?? "Room"
-              let room: Room = {id: cameraName, cameras: [], nodes:[]}
+              let roomName = prompt("Enter Room Name/ID: ", "Room") ?? "Room"
+              let room: Room = {id: roomName, cameras: [], nodes:[]}
               setFloor(produce(prev => {prev[currentFloorIdx].rooms.push(room)}))
               setSelectedRoomIdx(currentFloor.rooms.length)
             }
