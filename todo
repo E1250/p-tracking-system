@@ -12,3 +12,8 @@
 [ ] Compare experiments using MLFlow
 [ ] Use redis
 [ ] How to apply health checks
+
+
+Add more profiling stuff, like ruff
+Add testing
+Check batching and 

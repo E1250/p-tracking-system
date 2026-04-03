@@ -1,3 +1,39 @@
+# This is an overall alternative of SetupTools function that had been used before to create a package
+# It tells pip which tool to use to build/install package.
+# my-custom-ai-logic @ git+https://github.com/your-username/your-repo.git#subdirectory=ai_tools_folder
+#tracking_system_ai@git+    .git#subdirectory=folder_name
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# project metadata
+[project]
+name = "tracking_system"  # What ll be used in 'pip install'
+version = "0.0.1"
+description = "tracking_system"
+requires-python = ">=3.11"
+dependencies = [
+    "torch",
+    "numpy",
+    "opencv-python",
+]
+
+# pip install -e ".[dev]" -> This create a group of required package for dev, not deploy. differs between the user of this package and the contributer
+# As the user does't require testing packages, but contributer do
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "pytest-mock",
+    "httpx"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["ai"]
+
+
 # Note that it ignore files in .gitignore by default.
 [tool.ruff]
 exclude = [
@@ -5,31 +41,3 @@ exclude = [
     "playground.py",
     "playground.ipynb"
 ]
-
-# This is an overall alternative of SetupTools function that had been used before to create a package
-# It tells pip which tool to use to build/install package.
-# my-custom-ai-logic @ git+https://github.com/your-username/your-repo.git#subdirectory=ai_tools_folder
-#tracking_system_ai@git+    .git#subdirectory=folder_name
-
-# [build-system]
-# requires = ["setuptools>=61.0"]
-# build-backend = "setuptools.build_meta"
-
-# Package metadata
-[project]
-name = "tracking_system_ai"  # What ll be used in 'pip install'
-version = "0.0.1"
-description = "AI logic for tracking backend server"
-requires-python = ">=3.11"
-
-dependencies = [
-    "torch",
-    "numpy",
-    "opencv-python"
-]
-
-
-# Location of the package - you are going to use this to import
-[tool.setuptools]
-packages = ["ai"]
-# package-dir = {"ai" = "."}  # Mentioning that the package is in this folder directly.

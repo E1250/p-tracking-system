@@ -52,24 +52,6 @@ Plan:
 
 ## Phase 2 — Realtime inference pipeline (person/fire/smoke)
 
-### 2A) Define contracts (backend <-> dashboard)
-
-- Define a single camera snapshot schema (Pydantic model), including:
-  - `camera_id`, `timestamp`, `is_danger`, `danger_labels` (person/fire/smoke)
-  - `detections`: list of bboxes with class/conf/coords
-  - optional: `depth_points` / occupancy / heatmap summary
-- Ensure safe defaults (no mutable list defaults)
-Deliverable: versioned JSON schema that dashboard consumes.
-
-### 2B) YOLO inference integration
-
-- Enable YOLO detection in camera websocket handler
-- Add thresholds per class (config-driven)
-- Implement "danger" rule:
-  - danger if any of {person, fire, smoke} above threshold
-  - optional: debounce (e.g. require K of last M frames to reduce flicker)
-  Deliverable: live detections + `is_danger` updates stored in Redis.
-
 ### 2C) Optimization plan (pragmatic)
 
 - Profile baseline end-to-end latency (frame recv -> inference -> stored -> dashboard)
@@ -86,17 +68,7 @@ Deliverable: versioned JSON schema that dashboard consumes.
 
 ## Phase 3 — Dashboard: realtime viewer (not just editor)
 
-Current: dashboard is a floorplan editor stored in localStorage.
-Plan:
-
-- Add a networking layer:
-  - connect to backend websocket `/dashboard/stream`
-  - render camera states (danger coloring, badges)
-- Map backend camera_ids to floorplan camera nodes:
-  - add `camera_id` field to camera nodes in the editor data model
-  - UI for assigning/selecting camera_id per placed camera icon
 - UX:
-  - alert panel + timeline (last N incidents)
   - per-camera details drawer (detections list, last update time)
   Deliverable: dashboard shows realtime danger status on the floorplan.
 
@@ -128,14 +100,6 @@ Plan:
   Deliverable: CI-friendly tests validating the critical path.
 
 ---
-
-## Definition of Done (for MVP)
-
-- Multiple workers enabled; state consistent via Redis
-- Cameras stream frames, backend detects person/fire/smoke, writes snapshots
-- Dashboard websocket receives snapshots and renders danger status
-- Metrics + logs + health endpoints are meaningful
-- Reproducible install/run documented
 
 ---
 

@@ -13,6 +13,7 @@ from infra.logger_structlog import StructLogger
 import asyncio
 import mlflow
 from backend.utils.experiment import log_config
+import torch
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -48,6 +49,7 @@ async def lifespan(app: FastAPI):
     yield
 
     logger.warn("Shutting down the server....")
+    torch.cuda.empty_cache()
     # You can remove connections and release gpu here .  
 
 mlflow.set_tracking_uri("sqlite:///config/logs/mlflow.db")

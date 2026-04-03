@@ -16,4 +16,4 @@ async def test_server(number_of_cameras:int=1):
 # Make sure you use __name__ to avoid unexpected output while testing. 
 # I noticed unexpected lines to be working from the file here not expected without the  __name__ line. 
 if __name__ == "__main__": 
-    asyncio.run(test_server(5), debug=True)
+    asyncio.run(test_server(1), debug=True)
