@@ -1,4 +1,5 @@
-from ai.depth.depth_anything_v2.depth_anything_v2.dpt import DepthAnythingV2
+# from ai.depth.depth_anything_v2.depth_anything_v2.dpt import DepthAnythingV2
+from depth_anything_v2.dpt import DepthAnythingV2
 
 import torch
 from pathlib import Path
