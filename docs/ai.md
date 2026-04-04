@@ -32,3 +32,9 @@ Also i faced a new kind of issue today, it is regarding the sub-repo depth, i no
 using this, i could remove a specific file from cache `git rm --cached ai/depth/depth_anything_v2`
 
 and this to get back to the last commit, git reset --soft HEAD~1
+
+This line also is really important and great, 
+`git commit --amend --no-edit`
+it add the current modification to the existing commit, like you fixed a typo, it doesn't need a full commit again. 
+If you already pushed, do this again, and the force push. 
+also try to use this, `git rebase -i HEAD~2`, it is really useful. 

@@ -30,8 +30,8 @@ class DepthAnything:
         return:
             depth as an image
         """
-        if isinstance(frame, str):
-            raw_img = cv.imread(frame)
+        if isinstance(frame, (str, Path)):  # in case it was a path.
+            raw_img = cv.imread(frame)  
         elif isinstance(frame, numpy.ndarray):
             raw_img = frame
         
@@ -54,9 +54,10 @@ class DepthAnything:
             array of (min, max) values of this gray scale. 
         """
         depth = self.depth(frame)
-        
-        depth_values = []
-        for point in points:
-            depth_values.append(((depth[point[1]][point[0]] - depth.min()) / (depth.max() - depth.min())).item())
+        # TIP: I was advised in this part to always keep the math outside the loop to utilize C-level numpy optimization
+
+        d_min, d_max = depth.min(), depth.max()
+        normalized_depth = (depth -d_min) / (d_max - d_min)
+        depth_values = [normalized_depth[p[1], p[0]].item() for p in points]
 
         return depth_values

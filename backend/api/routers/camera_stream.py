@@ -1,6 +1,8 @@
+from backend.api.dependencies import get_safety_detection_model
+from backend.api.dependencies import get_detection_model, get_depth_model
 import asyncio
 import itertools
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 from pandas.core.frame import nested_data_to_arrays
 from ai.contracts.detector import DetectionResults
 from backend.api.routers.metrics import active_cameras, decode_duration_seconds, depth_duration_seconds, detection_duration_seconds, frame_processing_duration_seconds
@@ -16,7 +18,13 @@ import time
 router = APIRouter()
 
 @router.websocket("/stream/{camera_id}")
-async def websocket_detect(websocket: WebSocket, camera_id:str):
+async def websocket_detect(
+    websocket: WebSocket, 
+    camera_id:str,
+    detector=Depends(get_detection_model),
+    safety_detector=Depends(get_safety_detection_model),
+    depth_model=Depends(get_depth_model)
+    ):
     """
     WebSocket stream takes the frame pass it to the ai models, save it under the camera id provided in the url. 
     
@@ -25,10 +33,8 @@ async def websocket_detect(websocket: WebSocket, camera_id:str):
     # Yes, I asked the same questions, is using webscoket.app.state many times here is consuming.   after checking, it is not performance consuming. 
     state = websocket.app.state
     logger = state.logger
-    detector = state.detection_model
-    safety_detector = state.safety_detection_model
-    depth_model = state.depth_model
-    
+    # Using Depends is important and called Inversion Of Control (IoC)/ Dependency injection, and is important for testing.
+    redis = state.redis
 
     # Accepting the connection from the client
     await websocket.accept()
@@ -38,10 +44,10 @@ async def websocket_detect(websocket: WebSocket, camera_id:str):
     logger.info(f"Client ID >>{camera_id}<< Connected...")
     
     loop = asyncio.get_running_loop() 
-    step_counter = itertools.count()
     if mlflow.active_run():
          mlflow.end_run()
     run = mlflow.start_run(run_name=f'camera_{camera_id}', nested=True)
+    step_counter = itertools.count()
     log_config()
 
     try:
@@ -58,15 +64,6 @@ async def websocket_detect(websocket: WebSocket, camera_id:str):
         def decode_frame():
             # Decode image
             return cv.imdecode(np.frombuffer(frame_bytes, np.uint8), cv.IMREAD_COLOR)        
-            
-        def run_detection(frame) -> DetectionResults:
-            return detector.detect(frame)
-
-        def run_safety(frame) -> DetectionResults:
-            return safety_detector.detect(frame)
-
-        def run_depth(frame, points):
-            return depth_model.calculate_depth(frame, points)
 
         # Keep receiving messages in a loop until disconnection. 
         while True:
@@ -80,8 +77,8 @@ async def websocket_detect(websocket: WebSocket, camera_id:str):
             decode_duration_seconds.labels(camera_id).observe(round(time.time() - t0, 3))
             mlflow.log_metric("frame_processing_time", round(time.time() - t0, 3), next(step_counter))
 
-            detection_task = loop.run_in_executor(None, run_detection, image_array)
-            safety_task = loop.run_in_executor(None, run_safety, image_array)
+            detection_task = loop.run_in_executor(None, detector.detect, image_array)
+            safety_task = loop.run_in_executor(None, safety_detector.detect, image_array)
 
             detections, safety_detection = await asyncio.gather(detection_task, safety_task)
             detection_duration_seconds.labels(camera_id).observe(round(time.time() - t0, 3))
@@ -102,20 +99,22 @@ async def websocket_detect(websocket: WebSocket, camera_id:str):
                 boxes_center.append((int(xcenter), int(ycenter)))
                 boxes_center_ratio.append(xcenter / image_array.shape[1])
             
-            depth_points = await loop.run_in_executor(None, run_depth, image_array, boxes_center) if boxes_center else []
+            depth_points = await loop.run_in_executor(None, depth_model.calculate_depth, image_array, boxes_center) if boxes_center else []
             depth_duration_seconds.labels(camera_id).observe(round(time.time() - t0, 3))
             mlflow.log_metric("depth_duration_seconds", round(time.time() - t0, 3), next(step_counter))
 
             detection_metadata = [DetectionMetadata(depth=depth, xRatio=xRatio) for depth, xRatio in zip(depth_points, boxes_center_ratio)]
             metadata = CameraMetadata(camera_id=camera_id, is_danger = True if safety_detection else False, detection_metadata=detection_metadata)
-            state.camera_metadata[camera_id] = metadata.model_dump()
+            
+            # state.camera_metadata[camera_id] = metadata.model_dump()
+            await redis.publish("dashboard_stream", metadata.model_dump_json())
 
             # Note that JSONResponse doesn't work here, as it is for HTTP
             await websocket.send_json({"status": 200, "camera_id": camera_id})
 
     except WebSocketDisconnect:
         logger.warn(f"Client ID >>{camera_id}<< Disconnected Normally...")
-        state.camera_metadata.pop(camera_id, None)
+        # state.camera_metadata.pop(camera_id, None)
 
     except Exception as e:
         logger.error(f"Error in websocker, Client ID: >>{camera_id}<<: {e}")

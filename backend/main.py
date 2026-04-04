@@ -14,6 +14,10 @@ import asyncio
 import mlflow
 from backend.utils.experiment import log_config
 import torch
+from redis.asyncio import Redis
+from huggingface_hub import hf_hub_download
+import redis.asyncio as aioredis
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -23,33 +27,39 @@ async def lifespan(app: FastAPI):
     
     settings = AppConfig()
     logger = StructLogger(settings=settings)
-
    
     logger.info("Starting Server.... ")
-    asyncio.create_task(log_system_metrics(
-            logger, 
-            logger_interval_sec=settings.intervals.system_metrics_seconds))    
+    asyncio.create_task(log_system_metrics(logger, logger_interval_sec=settings.intervals.system_metrics_seconds))    
     
     # Using this way to can store data. it is acts as a dict which holds instances
     app.state.detection_model = YOLO_Detector(settings.yolo.model_path)
     app.state.depth_model = DepthAnything(encoder=settings.depth.encoder, depth_model_path=settings.depth.model_path, DEVICE="cuda")
 
-    # safety_detection_path = hg_hub_download(
-    #     repo_id="e1250/safety_detection",
-    #     filename="yolo_smoke_fire.pt",
-    # )
+    # safety_detection_path = hf_hub_download(repo_id="e1250/safety_detection", filename="yolo_smoke_fire.pt")
     app.state.safety_detection_model = YOLO_Detector(settings.security_detector.model_path)
 
     app.state.logger = logger
     app.state.settings = settings
+    # app.state.camera_metadata = {}
+    # app.state.dashboard_clients = set()
+    # Redis(host="localhost", port=6379, db=0, decode_responses=True)
+    app.state.redis = aioredis.from_url("redis://localhost:6379", db=0, decode_responses=True)
+    # Cnecking connection to redis. 
+    # Thinking of moving this to the health check. 
+    try:
+        await app.state.redis.ping()
+        logger.info("Redis connected successfully...")
+    except Exception as e:
+        logger.error(f"Failed to connect to Redis: {e}")
+        raise e
+
     # Each camera should have its tracker to be able to work fine. 
     # app.state.camera_trackers = {}
-    app.state.camera_metadata = {}
-    app.state.dashboard_clients = set()
     yield
 
     logger.warn("Shutting down the server....")
     torch.cuda.empty_cache()
+    await app.state.redis.close()
     # You can remove connections and release gpu here .  
 
 mlflow.set_tracking_uri("sqlite:///config/logs/mlflow.db")

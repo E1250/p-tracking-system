@@ -2,6 +2,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from backend.api.routers.metrics import active_dashboards 
 import asyncio
 import traceback
+import redis.asyncio as aioredis
 
 router = APIRouter()
 
@@ -14,6 +15,7 @@ async def dashboard_websocket(websocket: WebSocket):
     """
     state = websocket.app.state
     logger = state.logger
+    redis = state.redis
 
     # Accept the client connection. 
     await websocket.accept()
@@ -22,14 +24,20 @@ async def dashboard_websocket(websocket: WebSocket):
     active_dashboards.inc()
     logger.info("Dashboard Connected...")
 
-    try:
-        while True:
-            logger.debug("Sending updates to Dashboard...")
-            cameras_metadata = state.camera_metadata
-            await websocket.send_json(cameras_metadata)
+    pubsub = redis.pubsub()
+    await pubsub.subscribe("dashboard_stream")
 
-            # Sending data to the dashboard every 1.5 seconds.
-            await asyncio.sleep(state.settings.intervals.realtime_updates_every)
+    try:
+
+        while True:
+            message = await pubsub.get_message(ignore_subscribe_messages=True)
+
+            if message:
+                logger.debug("Sending updates to Dashboard...")
+                await websocket.send_text(message["data"])
+
+            await asyncio.sleep(0.01)  # giving time to detect server disconnection. 
+                
 
     except WebSocketDisconnect:
         logger.warn("Dashboard Disconnected Normally...")
@@ -40,3 +48,5 @@ async def dashboard_websocket(websocket: WebSocket):
 
     finally:
         active_dashboards.dec()
+        await pubsub.unsubscribe("dashboard_stream")
+        await pubsub.close()
