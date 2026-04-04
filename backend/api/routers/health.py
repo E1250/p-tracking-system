@@ -61,7 +61,7 @@ async def ready_check(response: Response):
 
     return {
         "status": "ready",
-        "checks": checks
+        "checks": checks,
         "timestamp": datetime.now().isoformat(),   # Sending the time also is a good practise
         "version": "1.0.0",
         }
