@@ -131,6 +131,13 @@ async def websocket_detect(
                 
                 # state.camera_metadata[camera_id] = metadata.model_dump()
                 await redis.publish("dashboard_stream", metadata.model_dump_json())
+                # Even if the camera was disconnected, redis is still going to show its data, which is not accurate.
+                # Instead, we set expiry date for the camera data.
+                await redis.setex(
+                    f"camera:{camera_id}:latest", # And this is the key, or tag
+                    10, # in seconds
+                    metadata.model_dump_json()
+                )
 
                 # Note that JSONResponse doesn't work here, as it is for HTTP
                 await websocket.send_json({"status": 200, "camera_id": camera_id})
