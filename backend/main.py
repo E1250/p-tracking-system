@@ -2,7 +2,7 @@ from fastapi import FastAPI
 # from prometheus_client import metrics
 from ai.depth.depth_anything import DepthAnything
 from ai.detectors.yolo_detector import YOLO_Detector
-from config.settings import AppConfig
+from backend.config.settings import AppConfig
 from backend.api.routers.metrics import metrics_asgi_app
 from infra.system_metrics import log_system_metrics
 from backend.api.routers import camera_stream
