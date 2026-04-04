@@ -38,10 +38,30 @@ async def ready_check(response: Response):
     # 2. Check Redis or cache ping
     # 3. Queue connection or length
 
-    response.status_code = HTTPStatus.OK
-    # response.status_code = HTTPStatus.SERVICE_UNAVAILABLE
+    checks = {}
+    healthy = True
+
+    # Check redis server
+    try:
+        await request.app.state.redis.ping()
+        checks["redis"] = "Good"
+    except Exception as e:
+        checks["redis"] = "unreachable"
+        healthy = False
+
+    # Model Check
+    try:
+        assert request.app.state.detection_model is not None
+        checks["detection_model"] = "Good"
+    except Exception:
+        checks["detection_model"] = "can't load"
+        healthy = False
+
+    response.status_code = HTTPStatus.OK if healthy else HTTPStatus.SERVICE_UNAVAILABLE
+
     return {
         "status": "ready",
+        "checks": checks
         "timestamp": datetime.now().isoformat(),   # Sending the time also is a good practise
         "version": "1.0.0",
         }
