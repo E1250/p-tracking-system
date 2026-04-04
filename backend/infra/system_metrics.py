@@ -1,7 +1,7 @@
 from domain.logger import Logger
 import psutil
 import asyncio
-from backend.api.routers.metrics import active_workers, cpu_usage, mem_usage
+from api.routers.metrics import active_workers, cpu_usage, mem_usage
 
 async def log_system_metrics(logger:Logger, logger_interval_sec:float):
     while True:
