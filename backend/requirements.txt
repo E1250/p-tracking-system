@@ -8,6 +8,6 @@ pydantic
 pydantic_settings
 structlog
 
-tracking_system@git+https://github.com/E1250/p-tracking_system.git
+tracking_system@git+https://github.com/E1250/p-tracking_system.git@main
 
 redis
