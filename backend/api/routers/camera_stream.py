@@ -1,15 +1,15 @@
-from backend.api.dependencies import get_safety_detection_model
-from backend.api.dependencies import get_detection_model, get_depth_model
+from api.dependencies import get_safety_detection_model
+from api.dependencies import get_detection_model, get_depth_model
 import asyncio
 import itertools
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 from pandas.core.frame import nested_data_to_arrays
 from ai.contracts.detector import DetectionResults
-from backend.api.routers.metrics import active_cameras, decode_duration_seconds, depth_duration_seconds, detection_duration_seconds, frame_processing_duration_seconds
-from backend.contracts.camera_metadata import CameraMetadata, DetectionMetadata
+from api.routers.metrics import active_cameras, decode_duration_seconds, depth_duration_seconds, detection_duration_seconds, frame_processing_duration_seconds
+from contracts.camera_metadata import CameraMetadata, DetectionMetadata
 import traceback
 import mlflow
-from backend.utils.experiment import log_config
+from utils.experiment import log_config
 
 import cv2 as cv
 import numpy as np
