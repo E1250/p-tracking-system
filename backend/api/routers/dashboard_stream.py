@@ -1,5 +1,5 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from backend.api.routers.metrics import active_dashboards 
+from api.routers.metrics import active_dashboards 
 import asyncio
 import traceback
 import redis.asyncio as aioredis

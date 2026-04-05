@@ -6,7 +6,7 @@ from http import HTTPStatus
 from datetime import datetime
 from fastapi import APIRouter, Response
 
-from backend.api.routers.metrics import active_cameras
+from api.routers.metrics import active_cameras
 
 router = APIRouter()
 
