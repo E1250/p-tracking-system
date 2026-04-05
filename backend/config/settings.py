@@ -19,7 +19,7 @@ class PathsConfig(BaseModel):
     """Contains paths of directories"""
     project_dir: str
     models_dir: str
-    logs_dir: str
+    # logs_dir: str
 
 class YoloConfig(BaseModel):
     """Contains yolo configurations"""

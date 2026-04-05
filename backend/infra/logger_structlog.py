@@ -16,13 +16,13 @@ def setup_logging(logs_path: Path | str):
             structlog.processors.JSONRenderer(),  # Makes JSON outputs
         ],
         wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),  # Profiling info and higher.
-        logger_factory = structlog.WriteLoggerFactory(file=log_file),    # Save in file instead of terminal
+        # logger_factory = structlog.WriteLoggerFactory(file=log_file),    # Save in file instead of terminal
         cache_logger_on_first_use=True,  # Caching being used for optimization
     )
 
 class StructLogger(Logger):
     def __init__(self, settings:AppConfig):
-        setup_logging(logs_path=settings.paths.logs_dir)
+        setup_logging(logs_path="")
         self._logger = structlog.get_logger()
 
     def info(self, message:str, **kwargs):

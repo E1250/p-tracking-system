@@ -18,7 +18,7 @@ paths:
   # project_dir: &proj_dir G:\MyComputer\Workspace\Projects\gp-tracking-dashboard\tracking_dashboard
   project_dir: &proj_dir .
   models_dir: &models_dir !join [*proj_dir, ai, dl_models]
-  logs_dir:  !join [*proj_dir, backend, config, logs, logs] 
+  # logs_dir:  !join [*proj_dir, backend, config, logs, logs] 
 
 yolo:
   model_path: !join [*models_dir, yolo26s.pt] 
