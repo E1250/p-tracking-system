@@ -44,7 +44,7 @@ async def lifespan(app: FastAPI):
     # app.state.camera_metadata = {}
     # app.state.dashboard_clients = set()
     # Redis(host="localhost", port=6379, db=0, decode_responses=True)
-    app.state.redis = aioredis.from_url("redis://localhost:6379", db=0, decode_responses=True)
+    app.state.redis = aioredis.from_url(settings.redis_url, decode_responses=True)
     # Cnecking connection to redis. 
     # Thinking of moving this to the health check. 
     try:

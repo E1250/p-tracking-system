@@ -74,6 +74,7 @@ class AppConfig(BaseSettings):
     security_detector: SecurityDetector
     depth: DepthConfig
     intervals: IntervalsConfig
+    redis_url:str
 
     # Backend
 

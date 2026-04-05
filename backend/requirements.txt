@@ -11,6 +11,7 @@ structlog
 tracking_system@git+https://github.com/E1250/p-tracking_system.git@main
 
 redis
+upstash_redis
 prometheus_client
 
 numpy 
