@@ -17,11 +17,11 @@ prometheus_port: 9091
 paths:
   # project_dir: &proj_dir G:\MyComputer\Workspace\Projects\gp-tracking-dashboard\tracking_dashboard
   project_dir: &proj_dir .
-  models_dir: &models_dir !join [*proj_dir, ai, dl_models]
+  # models_dir: &models_dir !join [*proj_dir, ai, dl_models]
   # logs_dir:  !join [*proj_dir, backend, config, logs, logs] 
 
 yolo:
-  model_path: !join [*models_dir, yolo26s.pt] 
+  # model_path: !join [*models_dir, yolo26s.pt] 
   classes:
     - person
   batch_size: 16
@@ -31,11 +31,11 @@ yolo:
   data_path: ""
 
 security_detector:
-  model_path: !join [*models_dir, "yolo_smoke_fire.pt"]
+  # model_path: !join [*models_dir, "yolo_smoke_fire.pt"]
   classes:
     - fire
     - smoke
 
 depth: 
-  model_path: !join [*models_dir, depth_anything_v2_vits.pth]  
+  # model_path: !join [*models_dir, depth_anything_v2_vits.pth]  
   encoder: "vits"

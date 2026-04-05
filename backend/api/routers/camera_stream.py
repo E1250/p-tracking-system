@@ -67,7 +67,7 @@ async def websocket_detect(
                         pass
                 
                 await frame_queue.put(frame_bytes)
-        except WebScoketDisconnect:
+        except WebSocketDisconnect:
             raise
     
     async def process_frames():

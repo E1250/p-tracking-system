@@ -30,11 +30,13 @@ async def lifespan(app: FastAPI):
     asyncio.create_task(log_system_metrics(logger, logger_interval_sec=settings.intervals.system_metrics_seconds))    
     
     # Using this way to can store data. it is acts as a dict which holds instances
-    app.state.detection_model = YOLO_Detector(settings.yolo.model_path)
+    app.state.detection_model = YOLO_Detector()
+
+    safety_detection_path = hf_hub_download(repo_id="depth-anything/Depth-Anything-V2-Small", filename="depth_anything_v2_vits.pth")
     app.state.depth_model = DepthAnything(encoder=settings.depth.encoder, depth_model_path=settings.depth.model_path, DEVICE="cuda")
 
-    # safety_detection_path = hf_hub_download(repo_id="e1250/safety_detection", filename="yolo_smoke_fire.pt")
-    app.state.safety_detection_model = YOLO_Detector(settings.security_detector.model_path)
+    safety_detection_path = hf_hub_download(repo_id="e1250/safety_detection", filename="yolo_smoke_fire.pt")
+    app.state.safety_detection_model = YOLO_Detector(safety_detection_path)
 
     app.state.logger = logger
     app.state.settings = settings

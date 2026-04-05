@@ -7,7 +7,7 @@ from ai.domain.detector import Detector
 from ai.utils.constants import YOLOExportFormats
 
 class YOLO_Detector(Detector):
-    def __init__(self, model_path:Path, f16=False):
+    def __init__(self, model_path:Path|str="", f16=False):
         self.model = YOLO(model_path)
         # self.model = self.model.eval()
         self.names = self.model.names
