@@ -6,14 +6,14 @@ import traceback
 async def test_websocket(camera_id:str="test_camera_id"):
     # Don't forget to add the camera id. or it will broke.
     # uri = f"ws://127.0.0.1:8000/detectors/stream/{camera_id}"
-    uri = f"wss://e1250-tracking-system-backend.hf.space/dashboard/stream/{camera_id}"
+    uri = f"wss://e1250-tracking-system-backend.hf.space/detectors/stream/{camera_id}"
 
     loop = asyncio.get_running_loop()
 
     try:
         async with websockets.connect(
             uri,
-            additional_headers={'Origin': "https://e1250-tracking-system-backend.hf.space"}
+            # additional_headers={'Origin': "https://e1250-tracking-system-backend.hf.space"}
             ) as websocket:
             # The best way to send the image to the backend, is by encoding and decoding it, 
             # As it will still contains its details like the shape, 
