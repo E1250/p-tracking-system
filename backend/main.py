@@ -15,6 +15,7 @@ import mlflow
 import torch
 from huggingface_hub import hf_hub_download
 import redis.asyncio as aioredis
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 
 @asynccontextmanager
@@ -73,6 +74,11 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan
     )
+
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=["*"]
+)
 
 # Routes
 app.mount("/metrics", metrics_asgi_app)    # Starting Prometheus server attached to my server.

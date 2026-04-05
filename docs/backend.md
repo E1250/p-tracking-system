@@ -67,3 +67,5 @@ So the better answer here, is per floor, you just pull the full floor details, a
 For the model, It is really beign suggested to let HF handling downloading and storing the model, don't hardcode the model path or the file. 
 
 Now we came to really critical point, which is moving to redis, but before this, i aimed to collect and monitor and profile my project, ofcourse for comparing and has a better understanding how this system works. I planeed to use MLFlow for the system, and prometheus for now.. 
+
+as i notinced, locally websockets works fine, but for production, add the --ws flag, as locally we use `ws://` but in prod we use `wss://`
