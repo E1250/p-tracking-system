@@ -16,7 +16,7 @@ import torch
 from huggingface_hub import hf_hub_download
 import redis.asyncio as aioredis
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
-
+import dagshub
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -64,6 +64,7 @@ async def lifespan(app: FastAPI):
     await app.state.redis.close()
     # You can remove connections and release gpu here .  
 
+dagshub.init(repo_owner='eslam760000', repo_name='p-tracking_system', mlflow=True)
 mlflow.set_tracking_uri("sqlite:///config/logs/mlflow.db")
 mlflow.set_experiment("realtime-detection-system")
 mlflow.enable_system_metrics_logging()
