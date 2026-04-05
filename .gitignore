@@ -4,6 +4,7 @@ ai/dl_models/
 node_modules/
 dummy_data/
 config/logs/
+*.pt
 
 # App Folder
 .env
