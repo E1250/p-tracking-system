@@ -10,7 +10,7 @@ build-backend = "hatchling.build"
 # Project Data Card
 [project]
 name = "tracking_system"  # What ll be used in 'pip install'
-version = "0.0.6"  # Increase this after some modifications to the ai package code. 
+version = "0.0.7"  # Increase this after some modifications to the ai package code. 
 description = ""
 requires-python = ">=3.11"
 dependencies = [
