@@ -1,11 +1,11 @@
-from backend.api.routers.metrics import depth_duration_seconds
-from backend.api.routers.metrics import detection_duration_seconds
-from backend.api.routers.metrics import decode_duration_seconds
-from backend.utils.profiling import profile_step
-from backend.domain.detection_box_center import calculate_detection_box_center
+from api.routers.metrics import depth_duration_seconds
+from api.routers.metrics import detection_duration_seconds
+from api.routers.metrics import decode_duration_seconds
+from utils.profiling import profile_step
+from domain.detection_box_center import calculate_detection_box_center
 import asyncio
-from backend.contracts.camera_metadata import DetectionMetadata
-from backend.contracts.camera_metadata import CameraMetadata
+from contracts.camera_metadata import DetectionMetadata
+from contracts.camera_metadata import CameraMetadata
 import cv2 as cv
 import numpy as np
 

@@ -1,4 +1,4 @@
-from backend.services.pipeline import ProcessingPipeline
+from services.pipeline import ProcessingPipeline
 import pytest
 import numpy as np
 from unittest.mock import MagicMock, AsyncMock, patch
@@ -33,7 +33,7 @@ async def test_pipeline_success(mock_deps):
 
     with (
         patch("cv2.imdecode") as mock_decode,
-        patch("backend.utils.profiling.mlflow") as mock_mlflow,
+        patch("utils.profiling.mlflow") as _,
     ):
         mock_decode.return_value = np.zeros((100, 100, 3), dtype=np.uint8)
 
@@ -60,7 +60,7 @@ async def test_pipeline_no_detections(mock_deps):
 
     with (
         patch("cv2.imdecode") as mock_decode,
-        patch("backend.utils.profiling.mlflow") as mock_mlflow,
+        patch("utils.profiling.mlflow") as _,
     ):
         mock_decode.return_value = np.zeros((100, 100, 3), dtype=np.uint8)
 

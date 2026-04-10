@@ -66,8 +66,8 @@ reportMissingTypeStubs = false
 
 # Pytest
 [tool.pytest.ini_options]
-
-testpaths = ["tests"]
+pythonpath = ["backend"]
+testpaths = ["backend/tests"]
 
 # Requierd for pytest-asyncio
 asyncio_mode = "auto"
