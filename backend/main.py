@@ -72,7 +72,7 @@ async def lifespan(app: FastAPI):
 
 # MLFlow setup
 dagshub.init(repo_owner="eslam760000", repo_name="p-tracking_system", mlflow=True)
-mlflow.set_tracking_uri("sqlite:///config/logs/mlflow.db")
+# mlflow.set_tracking_uri("sqlite:///config/logs/mlflow.db")
 mlflow.set_experiment("realtime-detection-system")
 parent_run = mlflow.start_run(run_name="server_session")
 mlflow.enable_system_metrics_logging()

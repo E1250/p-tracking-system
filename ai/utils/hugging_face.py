@@ -3,7 +3,7 @@
 from huggingface_hub import hf_hub_download
 
 
-def hf_fetch_model(repo_id: str, filename: str) -> str:
+def hf_fetch_model(repo_id: str, filename: str, cache_dir: str = ".hf_cache") -> str:
     """
     repo_id:
         str: hf repository id
@@ -12,7 +12,7 @@ def hf_fetch_model(repo_id: str, filename: str) -> str:
     return
         str: download path
     """
-    return hf_hub_download(repo_id=repo_id, filename=filename, cache_dir=".cache")
+    return hf_hub_download(repo_id=repo_id, filename=filename, cache_dir=cache_dir)
 
 
 def hf_upload_model():

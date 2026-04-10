@@ -4,9 +4,9 @@ name: Deploy Tracking System Backend to HF
 on:
   push:
     branches: [main]
-    # paths:
-    # - "backend/**"  # Only push when this folder being modified
-    # - ai/**  # Track also ai folder and update based on it
+    paths:
+      - "backend/**" # Only push when this folder being modified
+      - ai/** # Track also ai folder and update based on it
 
 # Job - the machine or env to run this code.
 jobs:

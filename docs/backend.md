@@ -72,3 +72,5 @@ as i notinced, locally websockets works fine, but for production, add the --ws f
 
 
 also regarding logging and mlflow, overall i must had created a one run for the session, and then child run per each camera, not a full run per each camera.
+
+I think this is one of the most important at all, note that on the cloud Dags needs authentication, just add this var in the secrets `DAGSHUB_USER_TOKEN` with a token value.

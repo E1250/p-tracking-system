@@ -19,7 +19,8 @@ dependencies = [
     "opencv-python",
     "pydantic",
     "ultralytics",
-    "websockets"
+    "websockets",
+    "dagshub"
 ]
 
 # pip install -e ".[dev]" -> This create a group of required package for dev, not deploy. 
@@ -35,7 +36,8 @@ dev = [
     "pyright", # type checker
     "mkdocs",
     "mkdocstrings[python]",
-    "pre-commit"
+    "pre-commit",
+    "anyio"
 ]
 
 [tool.hatch.build.targets.wheel]
