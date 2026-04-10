@@ -22,7 +22,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install pytest pytest-asyncio numpy pydantic opencv-python
+        run: pip install pytest pytest-asyncio numpy pydantic opencv-python mlflow prometheus_client
 
       - name: Run unit test
         # python -m here is most important, it let imports works as on PC. this fix imports issue

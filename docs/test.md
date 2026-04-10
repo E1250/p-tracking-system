@@ -20,3 +20,5 @@ then run this `pre-commit install`, it is one per project, now it is being attac
 
 
 also after modifying .pre-commit file , `pre-commit run --all-files`
+
+make sure you run `pre-commit install` after modifying .pre-commit file, otherwise it will not work.
