@@ -1,4 +1,4 @@
-from backend.services.pipeline import ProcessingPipeline
+from services.pipeline import ProcessingPipeline
 from api.dependencies import get_safety_detection_model
 from api.dependencies import get_detection_model, get_depth_model
 import asyncio
