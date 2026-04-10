@@ -10,7 +10,7 @@ repos:
     hooks:
       - id: pytest
         name: Run Unit Tests
-        entry: pytest backend/tests/ # CMD to run
+        entry: pytest backend/tests # CMD to run
         language: system # Use local python
         pass_filenames: false # Run all, not only the modified one
         always_run: true
