@@ -20,11 +20,14 @@ class YOLO_Detector(Detector):
         return:
             DetectionResults
         """
-        results = self.model(frame, half=self.f16)[0]  # Use fload 16, it is faster on GPUs with the same accuracy.
+        results = self.model(frame, half=self.f16)[
+            0
+        ]  # Use fload 16, it is faster on GPUs with the same accuracy.
         boxes = results.boxes
 
         detections: List[BBox] = [
-            BBox.from_yolo(i, boxes=boxes, names=self.names) for i in range(len(boxes.cls))
+            BBox.from_yolo(i, boxes=boxes, names=self.names)
+            for i in range(len(boxes.cls))
         ]
 
         return DetectionResults(detections=detections, orig_shape=boxes.orig_shape)

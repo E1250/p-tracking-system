@@ -17,3 +17,6 @@ now one of the most important things, and i see it is fixing a real issue i face
 then run this `pre-commit install`, it is one per project, now it is being attached into your .git file. note also that it only test the files in commit
 
 `pre-commit sample-config > .pre-commit-config.yaml` 
+
+
+also after modifying .pre-commit file , `pre-commit run --all-files`

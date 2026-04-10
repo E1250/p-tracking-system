@@ -1,6 +1,4 @@
-from backend.utils.profiling import profile_step
 from backend.services.pipeline import ProcessingPipeline
-from domain.detection_box_center import calculate_detection_box_center
 from api.dependencies import get_safety_detection_model
 from api.dependencies import get_detection_model, get_depth_model
 import asyncio
@@ -8,18 +6,10 @@ import itertools
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 from api.routers.metrics import (
     active_cameras,
-    decode_duration_seconds,
-    depth_duration_seconds,
-    detection_duration_seconds,
-    frame_processing_duration_seconds,
 )
-from contracts.camera_metadata import CameraMetadata, DetectionMetadata
 import mlflow
 from utils.experiment import log_config
 
-import cv2 as cv
-import numpy as np
-import time
 
 router = APIRouter()
 
@@ -56,7 +46,6 @@ async def websocket_detect(
     step_counter = itertools.count()
     pipeline = ProcessingPipeline(detector, depth_model, safety_detector, redis)
 
-
     # Queue removing old images in case they were being stacked
     frame_queue: asyncio.Queue = asyncio.Queue(maxsize=1)
 
@@ -86,9 +75,13 @@ async def websocket_detect(
                 frame_bytes = await frame_queue.get()
 
                 try:
-                    results = await pipeline.run(camera_id, frame_bytes, next(step_counter))
+                    results = await pipeline.run(
+                        camera_id, frame_bytes, next(step_counter)
+                    )
                 except Exception as e:
-                    logger.warn(f"Error happened while processing a frame in {camera_id}: {e}")
+                    logger.warn(
+                        f"Error happened while processing a frame in {camera_id}: {e}"
+                    )
                     logger.exception(e)
                     continue
 
@@ -99,7 +92,9 @@ async def websocket_detect(
             logger.error(f"Processing Error: {e}", camera_id=camera_id)
             raise
 
-    with mlflow.start_run(run_name=f"camera_{camera_id}", nested=True, parent_run_id=state.mlflow_run_id):
+    with mlflow.start_run(
+        run_name=f"camera_{camera_id}", nested=True, parent_run_id=state.mlflow_run_id
+    ):
         log_config()
 
         try:

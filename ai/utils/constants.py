@@ -1,4 +1,3 @@
-
 DEPTH_MODEL_CONFIG = {
     "vits": {"encoder": "vits", "features": 64, "out_channels": [48, 96, 192, 384]},
     "vitb": {"encoder": "vitb", "features": 128, "out_channels": [96, 192, 384, 768]},

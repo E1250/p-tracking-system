@@ -5,3 +5,12 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
+
+  - repo: local # It is on the local machine
+    hooks:
+      - id: pytest
+        name: Run Unit Tests
+        entry: pytest tests/unit # CMD to run
+        language: system # Use local python
+        pass_filenames: false # Run all, not only the modified one
+        always_run: true

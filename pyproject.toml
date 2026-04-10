@@ -47,6 +47,7 @@ exclude = [
     "ai/Depth-Anything-V2",
     "ai/depth",
     "playground.*",
+    "tests/unit",
 ]
 # Feel free also to customize ruff settings from here before formating it from cli
 
