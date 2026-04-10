@@ -30,3 +30,6 @@ depth:
   model_name: "depth_anything_v2_vits.pth"
   device: "cpu"
   encoder: "vits"
+
+hf_cache_dir: ".hf_cache"
+dagshub_user_token: ""

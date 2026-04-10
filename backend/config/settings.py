@@ -83,7 +83,6 @@ class AppConfig(BaseSettings):
     intervals: IntervalsConfig
     redis_url: str
     dagshub_user_token: str
-    hf_cache_dir: str
 
     @classmethod
     def settings_customise_sources(
