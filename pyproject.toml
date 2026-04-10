@@ -10,7 +10,7 @@ build-backend = "hatchling.build"
 # Project Data Card
 [project]
 name = "tracking_system"  # What ll be used in 'pip install'
-version = "0.0.7"  # Increase this after some modifications to the ai package code. 
+version = "0.0.8"  # Increase this after some modifications to the ai package code. 
 description = ""
 requires-python = ">=3.11"
 dependencies = [
@@ -33,6 +33,7 @@ dev = [
     "ruff",  # Code Formater and linter
     "pyright", # type checker
     "mkdocs",
+    "mkdocstrings[python]",
     "pre-commit"
 
 ]
@@ -45,6 +46,7 @@ packages = ["ai"]  # Match folder name in repo
 [tool.ruff]
 exclude = [
     "ai/Depth-Anything-V2",
+    "ai/depth",
     "playground.*",
 ]
 # Feel free also to customize ruff settings from here before formating it from cli
@@ -54,6 +56,7 @@ exclude = [
 [tool.pyright]
 
 include = ["ai"]
+exclude = ["ai/depth"]
 
 typeCheckingMode = "basic"  # Or strict is you want true senior-level regorous check
 reportMissingImports = true

@@ -1,9 +1,11 @@
 from typing import List
 from pydantic import BaseModel
 
+
 class DetectionMetadata(BaseModel):
     depth: float
     xRatio: float
+
 
 class CameraMetadata(BaseModel):
     camera_id: str

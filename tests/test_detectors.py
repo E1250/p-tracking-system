@@ -9,7 +9,9 @@ test_image = r"G:\MyComputer\Workspace\Projects\gp-tracking-dashboard\tracking_d
 config = AppConfig()
 annotator = Annotator(cv.imread(test_image))
 
-safety_detection_path = hf_fetch_model(repo_id="e1250/safety_detection", filename="yolo_smoke_fire.pt")
+safety_detection_path = hf_fetch_model(
+    repo_id="e1250/safety_detection", filename="yolo_smoke_fire.pt"
+)
 
 # Person Detector
 # yolo_detector = YOLO_Detector(model_path=config.yolo.model_path)
@@ -21,7 +23,7 @@ detections = yolo_detector.detect(test_image).detections
 
 for det in detections:
     print()
-    annotator.box_label(det.xyxy, label=f'{det.class_name}')
+    annotator.box_label(det.xyxy, label=f"{det.class_name}")
 
 output_image = annotator.result()
 cv.imshow("Annotation", output_image)

@@ -1,15 +1,14 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from api.routers.metrics import active_dashboards 
+from api.routers.metrics import active_dashboards
 import asyncio
-import traceback
-import redis.asyncio as aioredis
 
 router = APIRouter()
+
 
 @router.websocket("/stream")
 async def dashboard_websocket(websocket: WebSocket):
     """
-    WebScoket sending updates to the dashboard. 
+    WebScoket sending updates to the dashboard.
 
     url: ws://127.0.0.1:8000/dashboard/stream
     """
@@ -17,10 +16,10 @@ async def dashboard_websocket(websocket: WebSocket):
     logger = state.logger
     redis = state.redis
 
-    # Accept the client connection. 
+    # Accept the client connection.
     await websocket.accept()
 
-    # Logging and tracking 
+    # Logging and tracking
     active_dashboards.inc()
     logger.info("Dashboard Connected...")
 
@@ -28,7 +27,6 @@ async def dashboard_websocket(websocket: WebSocket):
     await pubsub.subscribe("dashboard_stream")
 
     try:
-
         while True:
             message = await pubsub.get_message(ignore_subscribe_messages=True)
 
@@ -36,8 +34,7 @@ async def dashboard_websocket(websocket: WebSocket):
                 logger.debug("Sending updates to Dashboard...")
                 await websocket.send_text(message["data"])
 
-            await asyncio.sleep(0.01)  # giving time to detect server disconnection. 
-                
+            await asyncio.sleep(0.01)  # giving time to detect server disconnection.
 
     except WebSocketDisconnect:
         logger.warn("Dashboard Disconnected Normally...")
