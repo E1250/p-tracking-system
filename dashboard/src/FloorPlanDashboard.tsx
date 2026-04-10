@@ -40,7 +40,7 @@ function FloorPlanEditor() {
   let currentFloor = floors[currentFloorIdx]
   let currentRoomNodes = currentFloor.rooms.at(selectedRoomIdx)?.nodes
   const camerasStream = useCameraStream(import.meta.env.VITE_BACKEND_STREAMING_URL) ?? { test_camera_id: { isDanger: false, detection_metadata: [] } }
-  // console.log("local server connection", camerasStream)
+  console.log("local server connection", camerasStream)
 
   // TODO, Test this here, you ight need to set
   const popNode = () => {

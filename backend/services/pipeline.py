@@ -8,6 +8,7 @@ from contracts.camera_metadata import DetectionMetadata
 from contracts.camera_metadata import CameraMetadata
 import cv2 as cv
 import numpy as np
+import json
 
 
 class ProcessingPipeline:
@@ -77,7 +78,11 @@ class ProcessingPipeline:
             camera_id, safety_detection, depth_points, boxes_center_ratio
         )
 
-        await self.redis.publish("dashboard_stream", metadata.model_dump_json())
+        # Note that this will generate text metadata.model_dump_json() don't use it here.
+        await self.redis.publish(
+            "dashboard_stream",
+            json.dumps({camera_id: metadata.model_dump(mode="json")}),
+        )
         # Even if the camera was disconnected, redis is still going to show its data, which is not accurate.
         # Instead, we set expiry date for the camera data.
         await self.redis.setex(

@@ -12,6 +12,7 @@ playground*
 .ruff_cache
 .cache
 __pycache__
+.hf_cache
 
 # Security
 .env

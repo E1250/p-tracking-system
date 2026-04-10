@@ -74,3 +74,9 @@ as i notinced, locally websockets works fine, but for production, add the --ws f
 also regarding logging and mlflow, overall i must had created a one run for the session, and then child run per each camera, not a full run per each camera.
 
 I think this is one of the most important at all, note that on the cloud Dags needs authentication, just add this var in the secrets `DAGSHUB_USER_TOKEN` with a token value.
+
+
+lastly i faced an issue that was driving me crazy, the dashboard was working really fine before, after i updated and finished backend, it is not working at all. after some debugging locally, finall i could find the issue. 
+after using redis, the structure of the output changed, then parsing on dashboard end was wronly, but with no error messages at all. 
+
+Overall, ai is really great giving feedback, but for some and ciritical cases, it was not that helpful, mostly i still had to debug myself and check where is the issue. 

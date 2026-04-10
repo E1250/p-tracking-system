@@ -6,8 +6,8 @@ import traceback
 
 async def test_dashboard_client():
     # Don't forget to make sure the camera is streaming, or it will broke, as it is a realtime.
-    # uri = "ws://127.0.0.1:8000/dashboard/stream"
-    uri = "wss://e1250-tracking-system-backend.hf.space/dashboard/stream"
+    uri = "ws://127.0.0.1:8000/dashboard/stream"
+    # uri = "wss://e1250-tracking-system-backend.hf.space/dashboard/stream"
 
     try:
         async with websockets.connect(uri) as websocket:

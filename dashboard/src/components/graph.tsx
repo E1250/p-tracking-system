@@ -40,7 +40,6 @@ export function EdgeNode({nodes, key, color="black"}){
 
 
 export function CameraNode({icon, pos, rotation=0, key, isHovering=false, cameraData={is_danger: false, detection_metadata:[]} as StreamDetections, roomNodes=[] as Node[]}){
-
   const [image] = useImage(icon)
   let detectionPoints:Node[] | null = []
   // let [hoveringOnCamera, setHoveringOnCamera] = useState<boolean>(false)

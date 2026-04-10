@@ -17,11 +17,6 @@ import dagshub
 from fastapi import FastAPI
 
 
-# settings = AppConfig()
-# if settings.dagshub_user_token:
-#     os.environ["DAGSHUB_USER_TOKEN"] = settings.dagshub_user_token
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
