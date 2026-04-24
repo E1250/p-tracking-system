@@ -44,7 +44,9 @@ async def websocket_detect(
     logger.info(f"Client ID >>{camera_id}<< Connected...")
 
     step_counter = itertools.count()
-    pipeline = ProcessingPipeline(detector, depth_model, safety_detector, redis)
+    pipeline = ProcessingPipeline(
+        detector, depth_model, safety_detector, redis, config=state.settings
+    )
 
     # Queue removing old images in case they were being stacked
     frame_queue: asyncio.Queue = asyncio.Queue(maxsize=1)

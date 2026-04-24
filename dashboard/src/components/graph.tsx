@@ -16,7 +16,7 @@ export function CircleNode({pos, mode, key, color="black", onDragEnd, onSelect, 
       fill= {color}
       opacity={isHovering ? 0.5 : 1}
       stroke="gray"
-      radius={10}
+      radius={12}
       // draggable={mode === "edit"} // TODO Fix this, also previous nodes in other rooms are draggable, fix this. 
       onDragEnd={onDragEnd}
       onclick={onSelect}
@@ -30,7 +30,7 @@ export function EdgeNode({nodes, key, color="black"}){
         points={nodes.flatMap(node => [node.x * window.innerWidth, node.y * window.innerHeight])}
         stroke={color}
         key={key+1}
-        strokeWidth={3}
+        strokeWidth={7}
         lineJoin='round'
         lineCap='round'
         closed={true}
@@ -60,12 +60,12 @@ export function CameraNode({icon, pos, rotation=0, key, isHovering=false, camera
       y={pos.y * window.innerHeight}
       alt='CameraNode'
       key={key + 1}
-      opacity={isHovering? 0.5 : 1}
+      opacity={isHovering? 0.7 : 1}
       rotation={rotation}
-      offsetX={25}
-      offsetY={25}
-      width={50} 
-      height={50}
+      offsetX={32.5}
+      offsetY={32.5}  // This should be half the width
+      width={65} 
+      height={65}
       // onMouseEnter={() => {setHoveringOnCamera(true); console.log("in")}}
       // onMouseLeave={() => {setHoveringOnCamera(false); console.log("out")}}
       />
@@ -101,11 +101,11 @@ export function CameraNode({icon, pos, rotation=0, key, isHovering=false, camera
 }
 
 export function StatusMark({pos, color="green"}){
-  const radious = [60, 45, 30] 
+  const radious = [70, 55, 40] 
   return (
     <>
     {radious.map((rad, i) => 
-        <Circle key={i} x={pos.x * window.innerWidth} y={pos.y * window.innerHeight} fill={color} radius={rad} opacity={(i+1)/10}/>
+        <Circle key={i} x={pos.x * window.innerWidth} y={pos.y * window.innerHeight} fill={color} radius={rad} opacity={(i+1)/5}/>
     )}
     </>
   )  

@@ -83,6 +83,7 @@ class AppConfig(BaseSettings):
     intervals: IntervalsConfig
     redis_url: str
     dagshub_user_token: str
+    experiment: bool
 
     @classmethod
     def settings_customise_sources(

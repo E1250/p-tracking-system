@@ -32,6 +32,7 @@ async def lifespan(app: FastAPI):
     logger.info("Starting Server.... ")
     # asyncio.create_task(log_system_metrics(logger, logger_interval_sec=settings.intervals.system_metrics_seconds))
 
+    logger.info("Downloading Models..")
     detection_model_path = hf_fetch_model(
         repo_id="Ultralytics/YOLO26",
         filename=settings.yolo.model_name,
@@ -54,6 +55,7 @@ async def lifespan(app: FastAPI):
     )
     app.state.safety_detection_model = YOLO_Detector(safety_detection_path)
 
+    logger.info("Connecting to Redis Server...")
     app.state.redis = aioredis.from_url(settings.redis_url, decode_responses=True)
     # Checking connection to redis - TODO add to health check
     try:

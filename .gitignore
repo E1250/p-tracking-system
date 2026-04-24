@@ -13,6 +13,8 @@ playground*
 .cache
 __pycache__
 .hf_cache
+.gradio
+.putest_cache
 
 # Security
 .env

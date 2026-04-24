@@ -5,6 +5,7 @@ project_name: Tracking Config
 project_desc: |
   Tracking System for detection, providing real-time camera status throught a Dashboard.
 task: indoor
+experiment: false
 intervals:
   system_metrics_seconds: 3.0 # Logging system metrics every
   frames_summary_every: 30 # Number of frames to create a logs summary

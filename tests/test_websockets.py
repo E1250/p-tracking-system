@@ -21,7 +21,7 @@ async def test_websocket(camera_id: str = "test_camera_id"):
                 def load_encode():
                     # Loading the image.
                     image = cv.imread(
-                        r"G:\MyComputer\Workspace\Projects\gp-tracking-dashboard\tracking_dashboard\dummy_data\home fire smoke.jpg"
+                        r"G:\MyComputer\Workspace\Projects\gp-tracking-dashboard\tracking_dashboard\dummy_data\home_fire_smoke.jpg"
                     )
 
                     # The best way to send the image to the backend, is by encoding and decoding it,

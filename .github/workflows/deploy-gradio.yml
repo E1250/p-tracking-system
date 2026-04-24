@@ -1,0 +1,27 @@
+name: Deploy Gradio Demo to HF
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "gradio/**" # If this was modified, we push updates into HF
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full git
+
+      - name: Push gradio to HF 
+        env:
+          HF_TOKEN: ${{secrets.HF_TOKEN}}
+        run: |
+          git config --global user.email "deploy@github.com"
+          git config --global user.name "Github Actions"
+          git remote add space https://e1250:$HF_TOKEN@huggingface.co/spaces/e1250/tracking_system_demo
+
+          git subtree split --prefix=gradio -b deploy_gradio_branch
+          git push space deploy_gradio_branch:main --force

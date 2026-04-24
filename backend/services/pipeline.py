@@ -12,11 +12,12 @@ import json
 
 
 class ProcessingPipeline:
-    def __init__(self, detector, depth_model, safety_detector, redis):
+    def __init__(self, detector, depth_model, safety_detector, redis, config):
         self.detector = detector
         self.depth_model = depth_model
         self.safety_detector = safety_detector
         self.redis = redis
+        self.config = config
 
     def _decode_frame(self, fb):
         return cv.imdecode(np.frombuffer(fb, np.uint8), cv.IMREAD_COLOR)
@@ -39,7 +40,11 @@ class ProcessingPipeline:
         loop = asyncio.get_running_loop()
 
         with profile_step(
-            "frame_processing_time", decode_duration_seconds, camera_id, frame_count
+            "frame_processing_time",
+            decode_duration_seconds,
+            camera_id,
+            frame_count,
+            experiment=self.config.experiment,
         ):
             frame_bytes = await loop.run_in_executor(
                 None, self._decode_frame, frame_bytes
@@ -50,6 +55,7 @@ class ProcessingPipeline:
             detection_duration_seconds,
             camera_id,
             frame_count,
+            experiment=self.config.experiment,
         ):
             detection_task = loop.run_in_executor(
                 None, self.detector.detect, frame_bytes
@@ -68,7 +74,11 @@ class ProcessingPipeline:
         depth_points = []
         if boxes_center:
             with profile_step(
-                "depth_duration_seconds", depth_duration_seconds, camera_id, frame_count
+                "depth_duration_seconds",
+                depth_duration_seconds,
+                camera_id,
+                frame_count,
+                experiment=self.config.experiment,
             ):
                 depth_points = await loop.run_in_executor(
                     None, self.depth_model.calculate_depth, frame_bytes, boxes_center

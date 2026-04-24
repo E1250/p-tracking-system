@@ -118,7 +118,7 @@ export function placeDetectionPoint(
     if (roomNodes.length < 3) return null
     
     // Clippting depthRatio just as validator to be in 0 to 1 ratio.
-    const t = Math.max(0, Math.min(1, streamDetections.depth))
+    const t = Math.max(0, Math.min(1, 1-streamDetections.depth))
     const x = Math.max(0, Math.min(1, streamDetections.xRatio))
 
     let hit = placeDepthPointOnRay(cameraPos, cameraAngleDeg, 1, roomNodes)

@@ -24,11 +24,15 @@ async def test_pipeline_success(mock_deps):
     mock_deps["detector"].detect.return_value.detections = [mock_detection]
     mock_deps["safety"].detect.return_value = []  # No dangers
 
+    mock_config = MagicMock()
+    mock_config.experiment = False
+
     pipeline = ProcessingPipeline(
         detector=mock_deps["detector"],
         safety_detector=mock_deps["safety"],
         depth_model=mock_deps["depth"],
         redis=mock_deps["redis"],
+        config=mock_config,
     )
 
     with (
@@ -51,11 +55,15 @@ async def test_pipeline_success(mock_deps):
 async def test_pipeline_no_detections(mock_deps):
     mock_deps["detector"].detect.return_value.detections = []
 
+    mock_config = MagicMock()
+    mock_config.experiment = False
+
     pipeline = ProcessingPipeline(
         detector=mock_deps["detector"],
         safety_detector=mock_deps["safety"],
         depth_model=mock_deps["depth"],
         redis=mock_deps["redis"],
+        config=mock_config,
     )
 
     with (
